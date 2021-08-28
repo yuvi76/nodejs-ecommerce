@@ -1,0 +1,14 @@
+# Ignoring node_modules folders
+node_modules
+
+# Ignoring VSCode ide configs
+.vscode
+
+# Ignoring ENV file
+.env
+
+# Ignoring package-lock
+package-lock.json
+
+# Ignoring DS_store
+.DS_store
