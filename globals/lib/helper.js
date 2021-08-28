@@ -258,6 +258,15 @@ _.isUserName = function (name) {
     return !regeX.test(name);
 };
 
+_.isValidName = function (name) {
+    const regeX = /^[a-zA-Z](( )?[a-zA-Z]+)*$/;
+    return !regeX.test(name);
+}
+
+_.isValidString = function (sString) {
+    return !sString.trim().length > 0 && sString.trim().length <= 100;
+}
+
 _.isPassword = function (password) {
     const regeX = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,15}$/;
     return !regeX.test(password);
