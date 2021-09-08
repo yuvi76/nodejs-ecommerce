@@ -9,8 +9,8 @@ const options = {
 
 mongoose.plugin(slug, options);
 
-// Category Schema
-const CategorySchema = mongoose.Schema(
+// Brand Schema
+const BrandSchema = mongoose.Schema(
   {
     sName: {
       type: String,
@@ -33,14 +33,13 @@ const CategorySchema = mongoose.Schema(
       type: Boolean,
       default: true,
     },
-    aProducts: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Product",
-      },
-    ],
+    oMerchantId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Merchant",
+      default: null,
+    },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Category", CategorySchema);
+module.exports = mongoose.model("Brand", BrandSchema);

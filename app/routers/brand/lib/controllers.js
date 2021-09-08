@@ -1,0 +1,120 @@
+const { Brand } = require("../../../models");
+const controllers = {};
+
+// Add Brand
+controllers.add = (req, res) => {
+    try {
+        // if (!req.userId) return res.reply(messages.unauthorized());
+        if (!req.body.sName) return res.reply(messages.not_found("Name"));
+        if (!req.body.sDescription) return res.reply(messages.not_found("Description"));
+
+        const brand = new Brand({
+            sName: req.body.sName,
+            sDescription: req.body.sDescription,
+            bIsActive: req.body.bIsActive
+        });
+
+        brand.save().then((result) => {
+            return res.reply(messages.added("Brand"), result);
+        }).catch((error) => {
+            console.log("error from mongo" + error);
+            return res.reply(messages.server_error());
+        });
+    } catch (error) {
+        console.log(error);
+        return res.reply(messages.server_error());
+    }
+};
+
+// Get All Brand
+controllers.getBrand = async (req, res, next) => {
+    try {
+        // if (!req.userId) return res.reply(messages.unauthorized());
+
+        await Brand.find({ isActive: true }).populate('oMerchantId', 'name').exec((err, Brandes) => {
+            if (err) return res.reply(messages.error());
+            return res.reply(messages.successfully("Brand List"), {
+                count: Brandes.length,
+                Brandes,
+            });
+        });
+    } catch (error) {
+        console.log(error);
+        return res.reply(messages.server_error());
+    }
+};
+
+// Get Brands
+controllers.getBrandbyMerchant = async (req, res, next) => {
+    try {
+        // if (!req.userId) return res.reply(messages.unauthorized());
+        if (req.user.merchantId) {
+            Brand.find({ oMerchantId: req.user.merchantId }).populate('merchant', 'name').exec((err, Brandes) => {
+                if (err) return res.reply(messages.error());
+                return res.reply(messages.successfully("Brand List"), {
+                    count: Brandes.length,
+                    Brandes,
+                });
+            });
+        } else {
+            Brand.find({}).populate('merchant', 'name').exec((err, Brandes) => {
+                if (err) return res.reply(messages.error());
+                return res.reply(messages.successfully("Brand List"), {
+                    count: Brandes.length,
+                    Brandes,
+                });
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        return res.reply(messages.server_error());
+    }
+};
+
+// Get Brand By Id
+controllers.getBrandById = async (req, res, next) => {
+    try {
+        // if (!req.userId) return res.reply(messages.unauthorized());
+
+        await Brand.findById(req.params.id, (err, Brand) => {
+            if (err) return res.reply(messages.error());
+            return res.reply(messages.successfully("Brand Detail"), {
+                Brand,
+            });
+        });
+    } catch (error) {
+        console.log(error);
+        return res.reply(messages.server_error());
+    }
+};
+
+// Update Brand By Id
+controllers.updateBrandById = async (req, res, next) => {
+    try {
+        // if (!req.userId) return res.reply(messages.unauthorized());
+
+        await Brand.findByIdAndUpdate(req.params.id, req.body, { new: true }, (err, brand) => {
+            if (err) return res.reply(messages.error());
+            return res.reply(messages.updated("Brand Detail"));
+        });
+    } catch (error) {
+        console.log(error);
+        return res.reply(messages.server_error());
+    }
+};
+
+// Delete Brand By Id
+controllers.deleteBrandById = async (req, res, next) => {
+    try {
+        // if (!req.userId) return res.reply(messages.unauthorized());
+
+        await Brand.deleteOne({ _id: req.params.id }, (err, brand) => {
+            if (err) return res.reply(messages.error());
+            return res.reply(messages.deleted("Brand"));
+        });
+    } catch (error) {
+        console.log(error);
+        return res.reply(messages.server_error());
+    }
+};
+module.exports = controllers;

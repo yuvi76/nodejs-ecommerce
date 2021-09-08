@@ -1,37 +1,63 @@
-const mongoose = require('mongoose');
-var mongoosePaginate = require("mongoose-paginate");
+const mongoose = require("mongoose");
+const slug = require("mongoose-slug-generator");
 
-const ProductSchema = mongoose.Schema({
-    sCategoryId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "category",
+const options = {
+  separator: "-",
+  lang: "en",
+  truncate: 120,
+};
+
+mongoose.plugin(slug, options);
+
+// Product Schema
+const ProductSchema = mongoose.Schema(
+  {
+    oCategoryId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "categories",
     },
     sName: {
-        type: String,
-        trim: true,
+      type: String,
+      trim: true,
+    },
+    slug: {
+      type: String,
+      slug: "name",
+      unique: true,
     },
     sDescription: {
-        type: String,
-        trim: true,
+      type: String,
+      trim: true,
     },
     nPrice: {
-        type: Number,
-        default: 1,
+      type: Number,
+      default: 1,
     },
-    sProductImage: {
-        type: String,
+    sImageUrl: {
+      type: String,
+    },
+    sImageKey: {
+      type: String,
     },
     nQuantity: {
-        type: Number,
-        default: 1,
+      type: Number,
+      default: 1,
     },
-    bStatus: {
-        type: Boolean,
-        default: true
-    }
-},
-    { timestamps: true }
+    bIsActive: {
+      type: Boolean,
+      default: true,
+    },
+    bTaxable: {
+      type: Boolean,
+      default: false,
+    },
+    oBrandId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Brand",
+      default: null,
+    },
+  },
+  { timestamps: true }
 );
 
-ProductSchema.plugin(mongoosePaginate);
-module.exports = mongoose.model('product', ProductSchema);
+module.exports = mongoose.model("Product", ProductSchema);

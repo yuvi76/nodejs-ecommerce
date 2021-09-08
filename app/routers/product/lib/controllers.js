@@ -8,7 +8,7 @@ controllers.create = (req, res) => {
         const product = new Product({
             sCategoryId: req.body.sCategoryId,
             sName: req.body.sName,
-            sPrice: req.body.sPrice,
+            nPrice: req.body.nPrice,
             sDescription: req.body.sDescription,
             // productImage: req.file.filename,
             nQuantity: req.body.nQuantity,
@@ -112,5 +112,22 @@ controllers.getProduct = async (req, res, next) => {
         return res.reply(messages.server_error());
     }
 }
+
+controllers.getProductByID = async (req, res) => {
+    try {
+        console.log(req.params);
+        if (!req.params.id)
+            return res.reply(messages.not_found("Product ID"));
+
+
+        const aProduct = await Product.findById(req.params.id).populate('oCategoryId');
+        if (!aProduct) return res.reply(messages.not_found("Product"));
+
+        return res.reply(messages.success(), aProduct);
+    } catch (error) {
+        console.log(error);
+        return res.reply(messages.server_error());
+    }
+};
 
 module.exports = controllers;

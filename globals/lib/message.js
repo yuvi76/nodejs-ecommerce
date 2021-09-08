@@ -26,6 +26,7 @@ const builder = {
     canceled: (prefix) => builder.prepare(419, prefix, 'canceled'),
     created: (prefix) => builder.prepare(200, prefix, 'created'),
     updated: (prefix) => builder.prepare(200, prefix, 'updated'),
+    added: (prefix) => builder.prepare(200, prefix, 'added'),
     deleted: (prefix) => builder.prepare(417, prefix, 'deleted'),
     blocked: (prefix) => builder.prepare(401, prefix, 'blocked'),
     success: (prefix) => builder.prepare(200, prefix, 'success'),
