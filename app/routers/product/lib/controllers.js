@@ -6,7 +6,7 @@ controllers.create = (req, res) => {
     try {
         // if (!req.userId) return res.reply(messages.unauthorized());
         const product = new Product({
-            sCategoryId: req.body.sCategoryId,
+            oBrandId: req.body.oBrandId,
             sName: req.body.sName,
             nPrice: req.body.nPrice,
             sDescription: req.body.sDescription,

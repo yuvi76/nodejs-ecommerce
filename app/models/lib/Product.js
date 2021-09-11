@@ -12,17 +12,13 @@ mongoose.plugin(slug, options);
 // Product Schema
 const ProductSchema = mongoose.Schema(
   {
-    oCategoryId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "categories",
-    },
     sName: {
       type: String,
       trim: true,
     },
     slug: {
       type: String,
-      slug: "name",
+      slug: "sName",
       unique: true,
     },
     sDescription: {
@@ -53,7 +49,7 @@ const ProductSchema = mongoose.Schema(
     },
     oBrandId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Brand",
+      ref: "brands",
       default: null,
     },
   },

@@ -45,7 +45,7 @@ controllers.list = async (req, res, next) => {
     try {
         // if (!req.userId) return res.reply(messages.unauthorized());
 
-        await Category.find({ isActive: true }, (err, categories) => {
+        await Category.find({ bIsActive: true }, (err, categories) => {
             if (err) return res.reply(messages.error())
             return res.reply(messages.successfully('Category List'), categories);
         });
@@ -109,7 +109,7 @@ controllers.deleteCategoryById = async (req, res, next) => {
                 return res.reply(messages.error());
             if (!category)
                 return res.reply(messages.not_found('Category'));
-            return res.reply(messages.deleted('Category'), category);
+            return res.reply(messages.deleted('Category'));
         });
     } catch (error) {
         console.log(error);

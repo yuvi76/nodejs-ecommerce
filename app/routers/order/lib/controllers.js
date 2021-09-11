@@ -63,38 +63,5 @@ controllers.getOrder = async (req, res, next) => {
     }
 }
 
-// Get store categories api
-controllers.list = async (req, res, next) => {
-    try {
-        // if (!req.userId) return res.reply(messages.unauthorized());
-
-        await Category.find({ isActive: true }, (err, categories) => {
-            if (err) return res.reply(messages.error())
-            return res.reply(messages.successfully('Category List'), categories);
-        });
-    } catch (error) {
-        console.log(error);
-        return res.reply(messages.server_error());
-    }
-}
-
-// Get category by id
-controllers.getCategoryById = async (req, res, next) => {
-    try {
-        // if (!req.userId) return res.reply(messages.unauthorized());
-
-        await Category.findById(req.params.id).populate({
-            path: 'aProducts',
-            select: 'sName'
-        }), ((err, category) => {
-            if (err) return res.reply(messages.error())
-            if (!category) return res.reply(messages.not_found('Category'));
-            return res.reply(messages.successfully('Category'), category);
-        });
-    } catch (error) {
-        console.log(error);
-        return res.reply(messages.server_error());
-    }
-}
 
 module.exports = controllers;

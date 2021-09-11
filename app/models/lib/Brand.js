@@ -35,7 +35,7 @@ const BrandSchema = mongoose.Schema(
     },
     oMerchantId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Merchant",
+      ref: "users",
       default: null,
     },
   },

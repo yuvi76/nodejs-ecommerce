@@ -31,7 +31,7 @@ controllers.getBrand = async (req, res, next) => {
     try {
         // if (!req.userId) return res.reply(messages.unauthorized());
 
-        await Brand.find({ isActive: true }).populate('oMerchantId', 'name').exec((err, Brandes) => {
+        await Brand.find({ bIsActive: true }).populate('oMerchantId').exec((err, Brandes) => {
             if (err) return res.reply(messages.error());
             return res.reply(messages.successfully("Brand List"), {
                 count: Brandes.length,
@@ -48,8 +48,8 @@ controllers.getBrand = async (req, res, next) => {
 controllers.getBrandbyMerchant = async (req, res, next) => {
     try {
         // if (!req.userId) return res.reply(messages.unauthorized());
-        if (req.user.merchantId) {
-            Brand.find({ oMerchantId: req.user.merchantId }).populate('merchant', 'name').exec((err, Brandes) => {
+        if (req.role == "merchant") {
+            Brand.find({ oMerchantId: req.userId }).populate('oMerchantId', 'sUsername').exec((err, Brandes) => {
                 if (err) return res.reply(messages.error());
                 return res.reply(messages.successfully("Brand List"), {
                     count: Brandes.length,
@@ -57,7 +57,7 @@ controllers.getBrandbyMerchant = async (req, res, next) => {
                 });
             });
         } else {
-            Brand.find({}).populate('merchant', 'name').exec((err, Brandes) => {
+            Brand.find({}).populate('oMerchantId').exec((err, Brandes) => {
                 if (err) return res.reply(messages.error());
                 return res.reply(messages.successfully("Brand List"), {
                     count: Brandes.length,
@@ -78,9 +78,7 @@ controllers.getBrandById = async (req, res, next) => {
 
         await Brand.findById(req.params.id, (err, Brand) => {
             if (err) return res.reply(messages.error());
-            return res.reply(messages.successfully("Brand Detail"), {
-                Brand,
-            });
+            return res.reply(messages.successfully("Brand Detail"), Brand);
         });
     } catch (error) {
         console.log(error);
@@ -95,7 +93,7 @@ controllers.updateBrandById = async (req, res, next) => {
 
         await Brand.findByIdAndUpdate(req.params.id, req.body, { new: true }, (err, brand) => {
             if (err) return res.reply(messages.error());
-            return res.reply(messages.updated("Brand Detail"));
+            return res.reply(messages.updated("Brand Detail"), brand);
         });
     } catch (error) {
         console.log(error);

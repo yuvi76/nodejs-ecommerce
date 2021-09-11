@@ -36,7 +36,7 @@ const CategorySchema = mongoose.Schema(
     aProducts: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Product",
+        ref: "products",
       },
     ],
   },

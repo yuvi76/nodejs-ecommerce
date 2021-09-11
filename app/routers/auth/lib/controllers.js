@@ -8,7 +8,8 @@ let signJWT = function (user) {
     return jwt.sign({
         id: user._id,
         sUsername: user.sUsername,
-        sEmail: user.sEmail
+        sEmail: user.sEmail,
+        sRole: user.sRole,
     }, process.env.JWT_SECRET);
 }
 

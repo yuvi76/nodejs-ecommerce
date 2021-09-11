@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const CartItemSchema = mongoose.Schema({
   oProductId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Product",
+    ref: "products",
   },
   nQuantity: Number,
   nPurchasePrice: {
@@ -38,7 +38,7 @@ const CartSchema = mongoose.Schema(
     aProducts: [CartItemSchema],
     oUserId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "users",
     },
   },
   { timestamps: true }

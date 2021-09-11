@@ -5,12 +5,12 @@ const WishlistSchema = mongoose.Schema(
   {
     oProductId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Product",
+      ref: "products",
       default: null,
     },
     oUserId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "users",
       default: null,
     },
     bIsLiked: {

@@ -9,7 +9,7 @@ const OrderSchema = mongoose.Schema(
     },
     oUserId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "users",
     },
     nTotal: {
       type: Number,
