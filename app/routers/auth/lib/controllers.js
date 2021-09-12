@@ -10,6 +10,7 @@ let signJWT = function (user) {
         sUsername: user.sUsername,
         sEmail: user.sEmail,
         sRole: user.sRole,
+        oMerchantId: user.oMerchantId
     }, process.env.JWT_SECRET);
 }
 

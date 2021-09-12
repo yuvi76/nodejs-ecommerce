@@ -17,8 +17,13 @@ const UsersSchema = mongoose.Schema(
     },
     sRole: {
       type: String,
-      enum: ["user", "admin","merchant"],
+      enum: ["user", "admin", "merchant"],
       default: "user",
+    },
+    oMerchantId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Merchant",
+      default: null,
     },
     sStatus: String,
     sHash: String,
@@ -28,4 +33,4 @@ const UsersSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("users", UsersSchema);
+module.exports = mongoose.model("User", UsersSchema);

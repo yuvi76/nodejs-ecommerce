@@ -38,7 +38,7 @@ const CartSchema = mongoose.Schema(
     aProducts: [CartItemSchema],
     oUserId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
+      ref: "User",
     },
   },
   { timestamps: true }

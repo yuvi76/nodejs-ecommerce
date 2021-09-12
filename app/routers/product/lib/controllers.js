@@ -1,17 +1,19 @@
-const { Product } = require('../../../models');
+const { Product, Brand, Category, Wishlist } = require('../../../models');
+const mongoose = require('mongoose');
 const controllers = {};
 
-// Create Product  
-controllers.create = (req, res) => {
+// Add Product  
+controllers.add = (req, res) => {
     try {
         // if (!req.userId) return res.reply(messages.unauthorized());
         const product = new Product({
             oBrandId: req.body.oBrandId,
             sName: req.body.sName,
             nPrice: req.body.nPrice,
+            bTaxable: req.body.bTaxable,
             sDescription: req.body.sDescription,
-            // productImage: req.file.filename,
             nQuantity: req.body.nQuantity,
+            // productImage: req.file.filename,
         });
 
         product.save()
@@ -29,105 +31,413 @@ controllers.create = (req, res) => {
 };
 
 // Get All Product
-controllers.getProduct = async (req, res, next) => {
+controllers.getProducts = async (req, res, next) => {
     try {
-        // if (!req.userId) return res.reply(messages.unauthorized());
+        let aProducts = [];
+        if (req.role == "merchant") {
+            const aBrands = await Brand.find({
+                oMerchantId: req.oMerchantId
+            }).populate('oMerchantId', '_id');
 
-        var nLimit = parseInt(req.body.length);
-        var nOffset = parseInt(req.body.start);
-        let oTypeQuery = {},
-            oSellingTypeQuery = {},
-            oSortingOrder = {};
-        let oTtextQuery = {
-            "sName": new RegExp(req.body.sTextsearch, 'i')
-        }
+            const brandId = aBrands[0]['_id'];
 
-
-        if (req.body.sSortingType == "Recently Added") {
-            oSortingOrder["sCreated"] = -1;
-        } else if (req.body.sSortingType == "Most Viewed") {
-            oSortingOrder["nView"] = -1;
-        } else if (req.body.sSortingType == "Price Low to High") {
-            oSortingOrder["nPrice"] = 1;
-        } else if (req.body.sSortingType == "Price High to Low") {
-            oSortingOrder["nPrice"] = -1;
-        } else {
-            oSortingOrder["_id"] = -1;
-        }
-
-
-        let data = await Product.aggregate([{
-            '$match': {
-                '$and': [{
-                    nQuantity: {
-                        $gt: 1
+            aProducts = await Product.find({})
+                .populate({
+                    path: 'oBrandId',
+                    populate: {
+                        path: 'oMerchantId',
+                        model: 'Merchant'
                     }
-                },
-                {
-                    bStatus: {
-                        $ne: false
-                    }
-                }]
-            }
-        }, {
-            '$sort': oSortingOrder
-        }, {
-            '$lookup': {
-                'from': 'categories',
-                'localField': 'sCategoryId',
-                'foreignField': '_id',
-                'as': 'oCategory'
-            }
-        }, {
-            '$facet': {
-                'products': [{
-                    "$skip": +nOffset
-                }, {
-                    "$limit": +nLimit
-                }],
-                'totalCount': [{
-                    '$count': 'count'
-                }]
-            }
-        }]);
-        console.log(data);
-        let iFiltered = data[0].products.length;
-        if (data[0].totalCount[0] == undefined) {
-            return res.reply(messages.success('Data'), {
-                data: 0,
-                "draw": req.body.draw,
-                "recordsTotal": 0,
-                "recordsFiltered": iFiltered,
-            });
+                })
+                .where('oBrandId', brandId);
         } else {
-            return res.reply(messages.no_prefix('Product List'), {
-                data: data[0].products,
-                "draw": req.body.draw,
-                "recordsTotal": data[0].totalCount[0].count,
-                "recordsFiltered": iFiltered,
+            aProducts = await Product.find({}).populate({
+                path: 'oBrandId',
+                populate: {
+                    path: 'oMerchantId',
+                    model: 'Merchant'
+                }
             });
         }
+        if (!aProducts) return res.reply(messages.not_found('Products'));
+        return res.reply(messages.no_prefix('Product List'), aProducts);
     } catch (error) {
         console.log(error);
         return res.reply(messages.server_error());
     }
 }
 
-controllers.getProductByID = async (req, res) => {
+// Get Product By Id
+controllers.getProductById = async (req, res) => {
     try {
-        console.log(req.params);
-        if (!req.params.id)
-            return res.reply(messages.not_found("Product ID"));
+        if (!req.params.id) return res.reply(messages.not_found("Product ID"));
 
+        let aProducts = [];
 
-        const aProduct = await Product.findById(req.params.id).populate('oCategoryId');
-        if (!aProduct) return res.reply(messages.not_found("Product"));
+        if (req.role == "merchant") {
+            const aBrands = await Brand.find({
+                oMerchantId: req.oMerchantId
+            }).populate('oMerchantId', '_id');
 
-        return res.reply(messages.success(), aProduct);
+            const brandId = aBrands[0]['_id'];
+
+            aProducts = await Product.findOne({})
+                .populate({
+                    path: 'oBrandId',
+                    populate: {
+                        path: 'oMerchantId',
+                        model: 'Merchant'
+                    }
+                })
+                .where('oBrandId', brandId);
+        } else {
+            aProducts = await Product.findOne({}).populate({
+                path: 'oBrandId',
+                populate: {
+                    path: 'oMerchantId',
+                    model: 'Merchant'
+                }
+            });
+        }
+        if (!aProducts) return res.reply(messages.not_found('Products'));
+        return res.reply(messages.no_prefix('Product List'), aProducts);
     } catch (error) {
         console.log(error);
         return res.reply(messages.server_error());
     }
 };
 
+// Update Product By Id
+controllers.updateProductById = async (req, res, next) => {
+    try {
+        // if (!req.userId) return res.reply(messages.unauthorized());
+
+        await Product.findByIdAndUpdate(req.params.id, req.body, { new: true }, (err, product) => {
+            if (err) return res.reply(messages.error());
+            if (!product) return res.reply(messages.not_found("Product"));
+            return res.reply(messages.updated("Product Detail"), product);
+        });
+    } catch (error) {
+        console.log(error);
+        return res.reply(messages.server_error());
+    }
+};
+
+// Delete Product By Id
+controllers.deleteProductById = async (req, res, next) => {
+    try {
+        // if (!req.userId) return res.reply(messages.unauthorized());
+
+        await Product.deleteOne({ _id: req.params.id }, (err, product) => {
+            if (err) return res.reply(messages.error());
+            return res.reply(messages.deleted("Product"));
+        });
+    } catch (error) {
+        console.log(error);
+        return res.reply(messages.server_error());
+    }
+};
+
+// Get All Product
+controllers.getAllProduct = async (req, res, next) => {
+    try {
+        // if (!req.userId) return res.reply(messages.unauthorized());
+        const userDoc = _.decodeToken(req.headers.authorization);
+        if (userDoc) {
+            const aProducts = await Product.aggregate([
+                {
+                    $match: { bIsActive: true }
+                },
+                {
+                    $lookup: {
+                        from: 'wishlists',
+                        let: { product: '$_id' },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $and: [
+                                        { $expr: { $eq: ['$$product', '$oProductId'] } },
+                                        { user: new mongoose.Types.ObjectId(userDoc.id) }
+                                    ]
+                                }
+                            }
+                        ],
+                        as: 'isLiked'
+                    }
+                },
+                {
+                    $addFields: {
+                        isLiked: { $arrayElemAt: ['$isLiked.isLiked', 0] }
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'brands',
+                        localField: 'oBrandId',
+                        foreignField: '_id',
+                        as: 'brands'
+                    }
+                },
+                {
+                    $unwind: '$brands'
+                },
+                {
+                    $addFields: {
+                        'oBrandId.sName': '$brands.sName',
+                        'oBrandId._id': '$brands._id',
+                        'oBrandId.bIsActive': '$brands.bIsActive'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'reviews',
+                        localField: '_id',
+                        foreignField: 'oProductId',
+                        as: 'reviews'
+                    }
+                },
+                {
+                    $addFields: {
+                        totalRatings: { $sum: '$reviews.rating' },
+                        totalReviews: { $size: '$reviews' }
+                    }
+                },
+                {
+                    $addFields: {
+                        averageRating: {
+                            $cond: [
+                                { $eq: ['$totalReviews', 0] },
+                                0,
+                                { $divide: ['$totalRatings', '$totalReviews'] }
+                            ]
+                        }
+                    }
+                },
+                { $project: { brands: 0, reviews: 0 } }
+            ]);
+
+            return res.reply(messages.no_prefix('Product List'), {
+                products: aProducts
+                    .filter(item => item?.oBrandId?.bIsActive === true)
+                    .reverse()
+                    .slice(0, 8),
+                page: 1,
+                pages: aProducts.length > 0 ? Math.ceil(aProducts.length / 8) : 0,
+                totalProducts: aProducts.length
+            });
+        } else {
+            const aProducts = await Product.aggregate([
+                {
+                    $match: { bIsActive: true }
+                },
+                {
+                    $lookup: {
+                        from: 'brands',
+                        localField: 'oBrandId',
+                        foreignField: '_id',
+                        as: 'brands'
+                    }
+                },
+                {
+                    $unwind: '$brands'
+                },
+                {
+                    $addFields: {
+                        'oBrandId.sName': '$brands.sName',
+                        'oBrandId._id': '$brands._id',
+                        'oBrandId.bIsActive': '$brands.bIsActive'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'reviews',
+                        localField: '_id',
+                        foreignField: 'oProductId',
+                        as: 'reviews'
+                    }
+                },
+                {
+                    $addFields: {
+                        totalRatings: { $sum: '$reviews.rating' },
+                        totalReviews: { $size: '$reviews' }
+                    }
+                },
+                {
+                    $addFields: {
+                        averageRating: {
+                            $cond: [
+                                { $eq: ['$totalReviews', 0] },
+                                0,
+                                { $divide: ['$totalRatings', '$totalReviews'] }
+                            ]
+                        }
+                    }
+                },
+                { $project: { brands: 0, reviews: 0 } }
+            ]);
+
+            return res.reply(messages.no_prefix('Product List'), {
+                products: aProducts
+                    .filter(item => item?.oBrandId?.bIsActive === true)
+                    .reverse()
+                    .slice(0, 8),
+                page: 1,
+                pages: aProducts.length > 0 ? Math.ceil(aProducts.length / 8) : 0,
+                totalProducts: aProducts.length
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        return res.reply(messages.server_error());
+    }
+};
+
+// Get Products By Category
+controllers.getProductByCategory = async (req, res, next) => {
+    try {
+        // if (!req.userId) return res.reply(messages.unauthorized());
+        const userDoc = _.decodeToken(req.headers.authorization);
+        const aCategory = await Category.findOne(
+            { sSlug: req.params.slug, bIsActive: true },
+            'aProducts -_id'
+        ).populate({
+            path: 'aProducts',
+            match: {
+                bIsActive: true
+            },
+            populate: {
+                path: 'oBrandId',
+                model: 'Brand',
+                select: 'sName bIsActive'
+            }
+        });
+        if (!aCategory) return res.reply(messages.not_found('Category'));
+        let aProducts = [];
+        if (userDoc) {
+            const aWishlist = await Wishlist.find({
+                user: userDoc.id,
+                bIsActive: true
+            }).populate({
+                path: 'product',
+                select: '_id'
+            });
+
+            const ps = aCategory.aProducts || [];
+
+            const newPs = [];
+            ps.map(p => {
+                let bIsLiked = false;
+
+                aWishlist.map(w => {
+                    if (String(w.product._id) === String(p._id)) {
+                        bIsLiked = true;
+                    }
+                });
+
+                const newProduct = { ...p.toObject(), bIsLiked };
+
+                newPs.push(newProduct);
+            });
+
+            aProducts = newPs;
+        } else {
+            aProducts = aCategory.aProducts;
+        }
+
+        return res.reply(messages.successfully('Product List'), aProducts);
+
+    } catch (error) {
+        console.log(error);
+        return res.reply(messages.server_error());
+    }
+};
+
+// Get Products By Brand
+controllers.getProductByBrand = async (req, res, next) => {
+    try {
+        // if (!req.userId) return res.reply(messages.unauthorized());
+        const userDoc = _.decodeToken(req.headers.authorization);
+        const aBrand = await Brand.findOne({ sSlug: req.params.slug, bIsActive: true });
+        if (!aBrand) return res.reply(messages.not_found('Brand'));
+
+        if (userDoc) {
+            const aProducts = await Product.aggregate([
+                {
+                    $match: {
+                        bIsActive: true,
+                        oBrandId: aBrand._id
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'wishlists',
+                        let: { product: '$_id' },
+                        pipeline: [
+                            {
+                                $match: {
+                                    $and: [
+                                        { $expr: { $eq: ['$$product', '$oProductId'] } },
+                                        { user: new mongoose.Types.ObjectId(userDoc.id) }
+                                    ]
+                                }
+                            }
+                        ],
+                        as: 'isLiked'
+                    }
+                },
+                {
+                    $lookup: {
+                        from: 'brands',
+                        localField: 'oBrandId',
+                        foreignField: '_id',
+                        as: 'brands'
+                    }
+                },
+                {
+                    $addFields: {
+                        isLiked: { $arrayElemAt: ['$isLiked.isLiked', 0] }
+                    }
+                },
+                {
+                    $unwind: '$brands'
+                },
+                {
+                    $addFields: {
+                        'oBrandId.sName': '$brands.sName',
+                        'oBrandId._id': '$brands._id',
+                        'oBrandId.bIsActive': '$brands.bIsActive'
+                    }
+                },
+                { $project: { brands: 0 } }
+            ]);
+            return res.reply(messages.successfully('Product List'), aProducts);
+        } else {
+            const aProducts = await Product.find({
+                oBrandId: aBrand._id,
+                bIsActive: true
+            }).populate('oBrandId', 'sName');
+            return res.reply(messages.successfully('Product List'), aProducts);
+        }
+
+
+    } catch (error) {
+        console.log(error);
+        return res.reply(messages.server_error());
+    }
+};
+
+// Get Products By Name
+controllers.getProductByName = async (req, res, next) => {
+    try {
+        const aProducts = await Product.find(
+            { sName: { $regex: new RegExp(req.params.name), $options: 'is' }, bIsActive: true },
+            { sName: 1, sSlug: 1, sImageUrl: 1, nPrice: 1, _id: 0 }
+        );
+        if (aProducts.length <= 0) return res.reply(messages.not_found('Product'));
+        return res.reply(messages.successfully('Product List'), aProducts);
+    } catch (error) {
+        console.log(error);
+        return res.reply(messages.server_error());
+    }
+}
 module.exports = controllers;

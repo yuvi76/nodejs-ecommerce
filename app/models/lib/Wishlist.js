@@ -10,7 +10,7 @@ const WishlistSchema = mongoose.Schema(
     },
     oUserId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
+      ref: "User",
       default: null,
     },
     bIsLiked: {

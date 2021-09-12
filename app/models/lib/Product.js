@@ -16,7 +16,7 @@ const ProductSchema = mongoose.Schema(
       type: String,
       trim: true,
     },
-    slug: {
+    sSlug: {
       type: String,
       slug: "sName",
       unique: true,
@@ -49,7 +49,7 @@ const ProductSchema = mongoose.Schema(
     },
     oBrandId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "brands",
+      ref: "Brand",
       default: null,
     },
   },

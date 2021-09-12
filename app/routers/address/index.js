@@ -4,8 +4,8 @@ const addressMiddleware = require('./lib/middleware');
 
 router.post('/add', addressMiddleware.checkUser, addressController.add);
 router.get('/', addressMiddleware.checkUser, addressController.getAddress);
-router.get('/:id', addressMiddleware.checkUser, addressController.getAddressById);
-router.put('/:id', addressMiddleware.checkUser, addressController.updateAddressById);
+router.get('/get/:id', addressMiddleware.checkUser, addressController.getAddressById);
+router.put('/update/:id', addressMiddleware.checkUser, addressController.updateAddressById);
 router.delete('/delete/:id', addressMiddleware.checkUser, addressController.deleteAddressById);
 
 module.exports = router;
