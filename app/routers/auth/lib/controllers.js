@@ -2,6 +2,9 @@ const { User } = require('../../../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const saltRounds = 10;
+const crypto = require('crypto');
+const { nodemailer } = require('../../../utils');
+
 const controllers = {};
 
 let signJWT = function (user) {
@@ -90,5 +93,112 @@ controllers.logout = (req, res, next) => {
         return res.reply(messages.server_error());
     }
 };
+
+controllers.passwordReset = (req, res, next) => {
+    try {
+
+        log.red(req.body);
+        if (!req.body.sEmail) return res.reply(messages.required_field('Email ID'));
+        if (_.isEmail(req.body.sEmail)) return res.reply(messages.invalid('Email ID'));
+
+        var randomHash = '';
+        crypto.randomBytes(20, function (err, buf) {
+            randomHash = buf.toString('hex');
+            if (err) console.log("crypto error");
+        });
+
+        User.findOne({
+            sEmail: req.body.sEmail
+        }, (err, user) => {
+            if (err) return res.reply(messages.error())
+            if (!user) return res.reply(messages.not_found('User'));
+
+            User.findOneAndUpdate({
+                sEmail: user.sEmail
+            }, {
+                $set: {
+                    sResetPasswordToken: randomHash,
+                    sResetPasswordExpires: Date.now() + 600
+                }
+            }, {
+                upsert: true
+            })
+                .then((doc) => {
+                    console.log("reset token saved");
+                })
+                .catch((err) => {
+                    console.log("error " + err);
+                });
+            nodemailer.send('forgot_password_mail.html', {
+                SITE_NAME: 'E-commerce',
+                USERNAME: user.oName.sFirstname,
+                ACTIVELINK: `${process.env.BASE_URL}:${process.env.PORT}/api/v1/auth/reset/${randomHash}`
+            }, {
+                from: process.env.SMTP_USERNAME,
+                to: user.sEmail,
+                subject: 'Forgot Password'
+            })
+            return res.reply(messages.successfully('Email Sent'));
+        });
+    } catch (error) {
+        console.log(error);
+        return res.reply(messages.server_error());
+    }
+}
+
+controllers.passwordResetGet = (req, res, next) => {
+
+    try {
+
+        if (!req.params.token) return res.reply(messages.not_found("Token"));
+
+        User.findOne({
+            sResetPasswordToken: req.params.token
+        }, function (err, user) {
+            if (!user) {
+                return res.render('error/token_expire')
+            }
+            return res.render('Admin/resetPassword')
+        });
+    } catch (error) {
+        return res.reply(messages.server_error());
+    }
+
+}
+
+controllers.passwordResetPost = (req, res, next) => {
+    try {
+
+        if (!req.params.token) return res.reply(messages.not_found("Token"));
+        if (!req.body.sPassword) return res.reply(messages.not_found("Password"));
+        if (!req.body.sConfirmPassword) return res.reply(messages.not_found("Confirm Password"));
+
+        if (_.isPassword(req.body.sPassword)) return res.reply(messages.invalid("Password"));
+        if (_.isPassword(req.body.sConfirmPassword)) return res.reply(messages.invalid("Password"));
+
+        User.findOne({
+            sResetPasswordToken: req.params.token
+        }, function (err, user) {
+            if (!user) return res.render('error/token_expire')
+            if (req.body.sConfirmPassword !== req.body.sPassword)
+                return res.reply(messages.bad_request('Password not matched'));
+
+            bcrypt.hash(req.body.sConfirmPassword, saltRounds, (err, hash) => {
+                if (err) return res.reply(messages.error());
+
+                user.sHash = hash;
+                user.sResetPasswordToken = undefined;
+                user.sResetPasswordExpires = undefined;
+
+                user.save((err) => {
+                    if (err) return res.reply(messages.error());
+                    return res.reply(messages.updated('Password'));
+                })
+            });
+        });
+    } catch (error) {
+        return res.reply(messages.server_error());
+    }
+}
 
 module.exports = controllers;

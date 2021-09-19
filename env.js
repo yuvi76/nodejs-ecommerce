@@ -28,3 +28,8 @@ process.env.BASE_URL = oEnv[process.env.NODE_ENV].BASE_URL;
 process.env.BASE_API_PATH = oEnv[process.env.NODE_ENV].BASE_API_PATH;
 process.env.JWT_SECRET = 'jwt-secret';
 process.env.DB_URL = oEnv[process.env.NODE_ENV].DB_URL;
+
+process.env.SMTP_HOST = 'smtp.gmail.com' || 'smtp.sendgrid.net';
+process.env.SMTP_PORT = 465;
+process.env.SMTP_USERNAME = process.env.SMTP_USERNAME || 'example@gmail.com'; // SMTP email
+process.env.SMTP_PASSWORD = process.env.SMTP_PASSWORD || 'example@123'; // Your password
