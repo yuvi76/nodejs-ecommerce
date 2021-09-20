@@ -5,7 +5,15 @@ const controllers = {};
 controllers.add = (req, res) => {
     try {
         // if (!req.userId) return res.reply(messages.unauthorized());
-        const cart = new Cart({ oUserId: req.userId }, { aProducts: req.body.aProducts });
+        let aProducts = [{
+            oProductId: req.body.oProductId,
+            nQuantity: req.body.nQuantity
+        }]
+
+        const cart = new Cart({
+            oUserId: req.userId,
+            aProducts
+        });
 
         cart.save().then((result) => {
             decreaseQuantity(aProducts);
@@ -39,8 +47,12 @@ controllers.deleteCartById = async (req, res, next) => {
 controllers.addProductToCart = async (req, res, next) => {
     try {
         // if (!req.userId) return res.reply(messages.unauthorized());
+        let aProducts = [{
+            oProductId: req.body.oProductId,
+            nQuantity: req.body.nQuantity
+        }]
 
-        await Cart.updateOne({ _id: req.params.cartId }, { $push: { aProducts: req.body.aProducts } }, (err, result) => {
+        await Cart.updateOne({ _id: req.params.cartId }, { $push: { aProducts } }, (err, result) => {
             if (err) return res.reply(messages.error());
             return res.reply(messages.successfully("Product Added"));
         });
@@ -57,9 +69,7 @@ controllers.removeProductFromCart = async (req, res, next) => {
 
         await Cart.updateOne({ _id: req.params.cartId }, { $pull: { aProducts: { oProductId: req.params.productId } } }, (err, result) => {
             if (err) return res.reply(messages.error());
-            return res.reply(messages.deleted("Product From Cart"), {
-                address,
-            });
+            return res.reply(messages.deleted("Product From Cart"), result);
         });
     } catch (error) {
         console.log(error);

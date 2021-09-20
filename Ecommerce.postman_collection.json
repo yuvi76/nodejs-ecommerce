@@ -6,6 +6,198 @@
 	},
 	"item": [
 		{
+			"name": "Address",
+			"item": [
+				{
+					"name": "Add",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "sAddress",
+									"value": "4,Building Name",
+									"type": "text"
+								},
+								{
+									"key": "sCity",
+									"value": "Ahmedabad",
+									"type": "text"
+								},
+								{
+									"key": "sState",
+									"value": "Gujarat",
+									"type": "text"
+								},
+								{
+									"key": "sCountry",
+									"value": "India",
+									"type": "text"
+								},
+								{
+									"key": "sZipCode",
+									"value": "380015",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/address/add",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"address",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Address",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{url}}/address/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"address",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Address By Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{user}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/address/613c81bba3a8cf3738f6415e",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"address",
+								"613c81bba3a8cf3738f6415e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Address By Id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "sAddress",
+									"value": "5,Building Name",
+									"type": "text"
+								},
+								{
+									"key": "sCity",
+									"value": "Ahmedabad",
+									"type": "text"
+								},
+								{
+									"key": "sState",
+									"value": "Gujarat",
+									"type": "text"
+								},
+								{
+									"key": "sCountry",
+									"value": "India",
+									"type": "text"
+								},
+								{
+									"key": "sZipCode",
+									"value": "380015",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/address/613c81bba3a8cf3738f6415e",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"address",
+								"613c81bba3a8cf3738f6415e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Address By Id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{user}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/address/61389e19292c5d46bc283cdf",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"address",
+								"61389e19292c5d46bc283cdf"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "auth",
 			"item": [
 				{
@@ -192,27 +384,16 @@
 			]
 		},
 		{
-			"name": "user",
+			"name": "Brand",
 			"item": [
 				{
-					"name": "Profile",
+					"name": "Add",
 					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": ""
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Profile",
-					"request": {
-						"method": "PUT",
+						"method": "POST",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMjlkMmViOWZlOGVhMjMzY2IxMTU0YiIsInNVc2VybmFtZSI6Ill1dmkiLCJzRW1haWwiOiJ1c2VyQHVzZXIuY29tIiwiaWF0IjoxNjMwMTMxNTcyfQ.Pq6dqyD_r_RsxIfwW6b20rGA9BY4rp1oY8vBk-LIma0",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMzhkN2M1YmMzMjNiMDNhYzZkOWExMiIsInNVc2VybmFtZSI6Ill1dmkiLCJzRW1haWwiOiJ1c2VyQHVzZXIuY29tIiwiaWF0IjoxNjMxMTE2MTc3fQ.FXzR1RVX5ByatOHzXcXlXWCzx4IEbk96Q9TWk2Ziht8",
 								"type": "text"
 							}
 						],
@@ -220,30 +401,325 @@
 							"mode": "urlencoded",
 							"urlencoded": [
 								{
-									"key": "sUserName",
-									"value": "user",
+									"key": "sName",
+									"value": "Brand 1",
 									"type": "text"
 								},
 								{
-									"key": "sFirstname",
-									"value": "yuvi",
+									"key": "sDescription",
+									"value": "Brand 1",
 									"type": "text"
 								},
 								{
-									"key": "sLastname",
-									"value": "user",
+									"key": "bIsActive",
+									"value": "true",
 									"type": "text"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{url}}/user/updateProfile",
+							"raw": "{{url}}/brand/add",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"user",
-								"updateProfile"
+								"brand",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Brands",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/brand/list",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"brand",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Brand By Mearchant",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{merchant}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/brand",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"brand"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Brand By Id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{merchant}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "sName",
+									"value": "BRAND 1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/brand/update/6138dadb5263622d40fb47a7",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"brand",
+								"update",
+								"6138dadb5263622d40fb47a7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Brand By Id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/brand/delete/6138dadb5263622d40fb47a7",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"brand",
+								"delete",
+								"6138dadb5263622d40fb47a7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Brand By Id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/brand/get/6138dadb5263622d40fb47a7",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"brand",
+								"get",
+								"6138dadb5263622d40fb47a7"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "Add",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "oProductId",
+									"value": "61346447b4cea811d8a3b1da",
+									"type": "text"
+								},
+								{
+									"key": "nQuantity",
+									"value": "1",
+									"type": "text"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/cart/add",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cart",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Product By Cart Id",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "oProductId",
+									"value": "61346447b4cea811d8a3b1da",
+									"type": "text"
+								},
+								{
+									"key": "nQuantity",
+									"value": "1",
+									"type": "text"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/cart/add/614858ef877ebb08ec7adb5f",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cart",
+								"add",
+								"614858ef877ebb08ec7adb5f"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Product From Card",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{user}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/cart/delete/614858ef877ebb08ec7adb5f/61346447b4cea811d8a3b1da",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cart",
+								"delete",
+								"614858ef877ebb08ec7adb5f",
+								"61346447b4cea811d8a3b1da"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Card By Id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{user}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/cart/delete/614858ef877ebb08ec7adb5f",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cart",
+								"delete",
+								"614858ef877ebb08ec7adb5f"
 							]
 						}
 					},
@@ -401,6 +877,399 @@
 							"path": [
 								"category",
 								"612a42ae3d19584acc8abcdc"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Merchant",
+			"item": [
+				{
+					"name": "Merchant List",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/merchant/list",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"merchant",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Seller-Request",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "sName",
+									"value": "Merchant",
+									"type": "text"
+								},
+								{
+									"key": "sEmail",
+									"value": "yuvraj.u@yudiz.in",
+									"type": "text"
+								},
+								{
+									"key": "sPhoneNumber",
+									"value": "1234567890",
+									"type": "text"
+								},
+								{
+									"key": "sBrand",
+									"value": "Panda",
+									"type": "text"
+								},
+								{
+									"key": "sBusiness",
+									"value": "Panda Official",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/merchant/seller-request",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"merchant",
+								"seller-request"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Merchant Request",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "bIsActive",
+									"value": "true",
+									"type": "text"
+								},
+								{
+									"key": "eStatus",
+									"value": "Approved",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/merchant/status/6147460ea92f2620303b9da4",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"merchant",
+								"status",
+								"6147460ea92f2620303b9da4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Merchant By Id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/merchant/delete/61473c84d76274062055fdd4",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"merchant",
+								"delete",
+								"61473c84d76274062055fdd4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Signup with token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "sEmail",
+									"value": "yuvraj.u@yudiz.in",
+									"type": "text"
+								},
+								{
+									"key": "sFirstname",
+									"value": "Yuvi",
+									"type": "text"
+								},
+								{
+									"key": "sLastname",
+									"value": "Merchant",
+									"type": "text"
+								},
+								{
+									"key": "sPassword",
+									"value": "Abc@123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/merchant/signup/bb52f8310e9a23b547081003bafeaf0c26624616",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"merchant",
+								"signup",
+								"bb52f8310e9a23b547081003bafeaf0c26624616"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order",
+			"item": [
+				{
+					"name": "Add",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "oCartId",
+									"value": "61485e85d246d4335c04a90c",
+									"type": "text"
+								},
+								{
+									"key": "nTotal",
+									"value": "5",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/order/add",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"order",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Orders",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "oCartId",
+									"value": "61485e85d246d4335c04a90c",
+									"type": "text"
+								},
+								{
+									"key": "nTotal",
+									"value": "5",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/order/",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"order",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Order by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{user}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/order/search/6148607764b1302ebc41c3bc",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"order",
+								"search",
+								"6148607764b1302ebc41c3bc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Order by id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{user}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/order/get/6148607764b1302ebc41c3bc",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"order",
+								"get",
+								"6148607764b1302ebc41c3bc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Order status by id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "orderId",
+									"value": "6148607764b1302ebc41c3bc",
+									"type": "text"
+								},
+								{
+									"key": "cartId",
+									"value": "61485fc2b0c4ee407c5ade0b",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "Processing",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/order/status/item/61485fc2b0c4ee407c5ade0c",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"order",
+								"status",
+								"item",
+								"61485fc2b0c4ee407c5ade0c"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cancle Order status by id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{user}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/order/cancel/6148607764b1302ebc41c3bc",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"order",
+								"cancel",
+								"6148607764b1302ebc41c3bc"
 							]
 						}
 					},
@@ -671,390 +1540,62 @@
 			]
 		},
 		{
-			"name": "Address",
+			"name": "user",
 			"item": [
 				{
-					"name": "Add",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{user}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "sAddress",
-									"value": "4,Building Name",
-									"type": "text"
-								},
-								{
-									"key": "sCity",
-									"value": "Ahmedabad",
-									"type": "text"
-								},
-								{
-									"key": "sState",
-									"value": "Gujarat",
-									"type": "text"
-								},
-								{
-									"key": "sCountry",
-									"value": "India",
-									"type": "text"
-								},
-								{
-									"key": "sZipCode",
-									"value": "380015",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{url}}/address/add",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"address",
-								"add"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get All Address",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{user}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": []
-						},
-						"url": {
-							"raw": "{{url}}/address/",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"address",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Address By Id",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{user}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{url}}/address/613c81bba3a8cf3738f6415e",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"address",
-								"613c81bba3a8cf3738f6415e"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Address By Id",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{user}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "sAddress",
-									"value": "5,Building Name",
-									"type": "text"
-								},
-								{
-									"key": "sCity",
-									"value": "Ahmedabad",
-									"type": "text"
-								},
-								{
-									"key": "sState",
-									"value": "Gujarat",
-									"type": "text"
-								},
-								{
-									"key": "sCountry",
-									"value": "India",
-									"type": "text"
-								},
-								{
-									"key": "sZipCode",
-									"value": "380015",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{url}}/address/613c81bba3a8cf3738f6415e",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"address",
-								"613c81bba3a8cf3738f6415e"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Address By Id",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{user}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{url}}/address/61389e19292c5d46bc283cdf",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"address",
-								"61389e19292c5d46bc283cdf"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Brand",
-			"item": [
-				{
-					"name": "Add",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMzhkN2M1YmMzMjNiMDNhYzZkOWExMiIsInNVc2VybmFtZSI6Ill1dmkiLCJzRW1haWwiOiJ1c2VyQHVzZXIuY29tIiwiaWF0IjoxNjMxMTE2MTc3fQ.FXzR1RVX5ByatOHzXcXlXWCzx4IEbk96Q9TWk2Ziht8",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "sName",
-									"value": "Brand 1",
-									"type": "text"
-								},
-								{
-									"key": "sDescription",
-									"value": "Brand 1",
-									"type": "text"
-								},
-								{
-									"key": "bIsActive",
-									"value": "true",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{url}}/brand/add",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"brand",
-								"add"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Brands",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"url": {
-							"raw": "{{url}}/brand/list",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"brand",
-								"list"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Brand By Mearchant",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{merchant}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{url}}/brand",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"brand"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Brand By Id",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{merchant}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "sName",
-									"value": "BRAND 1",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{url}}/brand/6138dadb5263622d40fb47a7",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"brand",
-								"6138dadb5263622d40fb47a7"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Brand By Id",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "{{admin}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{url}}/brand/6138dadb5263622d40fb47a7",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"brand",
-								"6138dadb5263622d40fb47a7"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Brand By Id",
+					"name": "Profile",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{url}}/brand/6138dadb5263622d40fb47a7",
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Profile",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxMjlkMmViOWZlOGVhMjMzY2IxMTU0YiIsInNVc2VybmFtZSI6Ill1dmkiLCJzRW1haWwiOiJ1c2VyQHVzZXIuY29tIiwiaWF0IjoxNjMwMTMxNTcyfQ.Pq6dqyD_r_RsxIfwW6b20rGA9BY4rp1oY8vBk-LIma0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "sUserName",
+									"value": "user",
+									"type": "text"
+								},
+								{
+									"key": "sFirstname",
+									"value": "yuvi",
+									"type": "text"
+								},
+								{
+									"key": "sLastname",
+									"value": "user",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/user/updateProfile",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"brand",
-								"6138dadb5263622d40fb47a7"
+								"user",
+								"updateProfile"
 							]
 						}
 					},
 					"response": []
-				}
-			],
-			"auth": {
-				"type": "bearer",
-				"bearer": [
-					{
-						"key": "token",
-						"value": "",
-						"type": "string"
-					}
-				]
-			},
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
 				}
 			]
 		}
