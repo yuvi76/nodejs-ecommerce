@@ -1,9 +1,9 @@
 const router = require('express').Router();
-const orderController = require('./lib/controllers');
-const orderMiddleware = require('./lib/middleware');
+const wishlistController = require('./lib/controllers');
+const wishlistMiddleware = require('./lib/middleware');
 
-router.post('/', orderMiddleware.checkUser, orderController.addWishlistItem);
-router.get('/', orderMiddleware.checkUser, orderController.getWishlistItem);
+router.post('/', wishlistMiddleware.checkUser, wishlistController.addWishlistItem);
+router.get('/', wishlistMiddleware.checkUser, wishlistController.getWishlistItem);
 
 
 module.exports = router;

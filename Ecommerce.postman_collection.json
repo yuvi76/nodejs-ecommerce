@@ -1598,6 +1598,285 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Wishlist",
+			"item": [
+				{
+					"name": "Add Product to wishlist",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "oProductId",
+									"value": "612a3f3b71065143e4e0934e",
+									"type": "text"
+								},
+								{
+									"key": "bIsLiked",
+									"value": "true",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/wishlist",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"wishlist"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Product to wishlist",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{user}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/wishlist",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"wishlist"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Review",
+			"item": [
+				{
+					"name": "Add",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "oProductId",
+									"value": "612a3f3b71065143e4e0934e",
+									"type": "text"
+								},
+								{
+									"key": "sTitle",
+									"value": "R 1",
+									"type": "text"
+								},
+								{
+									"key": "nRating",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "sReview",
+									"value": "R 11 ",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/review/add",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"review",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Reviews By Id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{user}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "oProductId",
+									"value": "612a3f3b71065143e4e0934e",
+									"type": "text"
+								},
+								{
+									"key": "sTitle",
+									"value": "R 11",
+									"type": "text"
+								},
+								{
+									"key": "nRating",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "sReview",
+									"value": "R 11 ",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/review/edit/61487b22c37bb33810c79173",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"review",
+								"edit",
+								"61487b22c37bb33810c79173"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Reviews By Id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "eStatus",
+									"value": "Approved",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/review/update/61487b22c37bb33810c79173",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"review",
+								"update",
+								"61487b22c37bb33810c79173"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Reviews",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{admin}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/review/getAllReviews",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"review",
+								"getAllReviews"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Reviews By Product",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{user}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/review/getAllReviewsByProduct/P1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"review",
+								"getAllReviewsByProduct",
+								"P1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Reviews By Id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{user}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{url}}/review/delete/61487b22c37bb33810c79173",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"review",
+								"delete",
+								"61487b22c37bb33810c79173"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	],
 	"event": [
