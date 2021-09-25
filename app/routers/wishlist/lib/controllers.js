@@ -4,6 +4,9 @@ const controllers = {};
 // Add Item  
 controllers.addWishlistItem = async (req, res) => {
     try {
+        if (!req.body.oProductId) return res.reply(messages.required_field("Product ID"));
+        if (!req.body.bIsLiked) return res.reply(messages.required_field("Like Status"));
+        if (_.isValidObjectID(req.body.oProductId)) res.reply(messages.invalid("Product ID"));
         const updatedWishlist = await Wishlist.findOneAndUpdate(
             { oProductId: req.body.oProductId, oUserId: req.userId },
             { oProductId: req.body.oProductId, oUserId: req.userId, bIsLiked: req.body.bIsLiked },

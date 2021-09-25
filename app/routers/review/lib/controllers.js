@@ -4,6 +4,12 @@ const controllers = {};
 // Add Review  
 controllers.add = async (req, res) => {
     try {
+        if (!req.body.oProductId) return res.reply(messages.required_field("Product ID"));
+        if (!req.body.sTitle) return res.reply(messages.required_field("Title"));
+        if (!req.body.nRating) return res.reply(messages.required_field("Rating"));
+        if (!req.body.sReview) return res.reply(messages.required_field("Review"));
+        if (!req.body.bIsRecommended) return res.reply(messages.required_field("Recommended Status"));
+        if (_.isValidObjectID(req.body.oProductId)) res.reply(messages.invalid("Product ID"));
         const review = new Review({
             oProductId: req.body.oProductId,
             sTitle: req.body.sTitle,
@@ -75,6 +81,10 @@ controllers.getAllReviewsByProduct = async (req, res) => {
 // Edit Reviews By Id  
 controllers.editReviewById = async (req, res) => {
     try {
+        if (!req.body.sTitle) return res.reply(messages.required_field("Title"));
+        if (!req.body.nRating) return res.reply(messages.required_field("Rating"));
+        if (!req.body.sReview) return res.reply(messages.required_field("Review"));
+        if (!req.body.bIsRecommended) return res.reply(messages.required_field("Recommended Status"));
         let oReview = {
             sTitle: req.body.sTitle,
             nRating: req.body.nRating,
@@ -99,6 +109,7 @@ controllers.editReviewById = async (req, res) => {
 // Update Reviews By Id  
 controllers.updateReviewById = async (req, res) => {
     try {
+        if (!req.body.eStatus) return res.reply(messages.required_field("Review Status"));
         await Review.findOneAndUpdate({ _id: req.params.reviewId }, { eStatus: req.body.eStatus }, { new: true }, (err, review) => {
             if (err)
                 return res.reply(messages.error());

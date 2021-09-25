@@ -5,7 +5,13 @@ const controllers = {};
 // Add Product  
 controllers.add = (req, res) => {
     try {
-        // if (!req.userId) return res.reply(messages.unauthorized());
+        if (!req.body.oBrandId) return res.reply(messages.required_field("Brand ID"));
+        if (!req.body.sName) return res.reply(messages.required_field("Name"));
+        if (!req.body.nPrice) return res.reply(messages.required_field("Price"));
+        if (!req.body.sDescription) return res.reply(messages.required_field("Description"));
+        if (!req.body.nQuantity) return res.reply(messages.required_field("Quantity"));
+        if (!req.body.bTaxable) return res.reply(messages.required_field("Tax Status"));
+        if (_.isValidObjectID(req.body.oBrandId)) res.reply(messages.invalid("Brand ID"));
         const product = new Product({
             oBrandId: req.body.oBrandId,
             sName: req.body.sName,
@@ -110,8 +116,6 @@ controllers.getProductById = async (req, res) => {
 // Update Product By Id
 controllers.updateProductById = async (req, res, next) => {
     try {
-        // if (!req.userId) return res.reply(messages.unauthorized());
-
         await Product.findByIdAndUpdate(req.params.id, req.body, { new: true }, (err, product) => {
             if (err) return res.reply(messages.error());
             if (!product) return res.reply(messages.not_found("Product"));
@@ -126,8 +130,6 @@ controllers.updateProductById = async (req, res, next) => {
 // Delete Product By Id
 controllers.deleteProductById = async (req, res, next) => {
     try {
-        // if (!req.userId) return res.reply(messages.unauthorized());
-
         await Product.deleteOne({ _id: req.params.id }, (err, product) => {
             if (err) return res.reply(messages.error());
             return res.reply(messages.deleted("Product"));
@@ -141,7 +143,6 @@ controllers.deleteProductById = async (req, res, next) => {
 // Get All Product
 controllers.getAllProduct = async (req, res, next) => {
     try {
-        // if (!req.userId) return res.reply(messages.unauthorized());
         const userDoc = _.decodeToken(req.headers.authorization);
         if (userDoc) {
             const aProducts = await Product.aggregate([
@@ -295,7 +296,6 @@ controllers.getAllProduct = async (req, res, next) => {
 // Get Products By Category
 controllers.getProductByCategory = async (req, res, next) => {
     try {
-        // if (!req.userId) return res.reply(messages.unauthorized());
         const userDoc = _.decodeToken(req.headers.authorization);
         const aCategory = await Category.findOne(
             { sSlug: req.params.slug, bIsActive: true },
@@ -355,7 +355,6 @@ controllers.getProductByCategory = async (req, res, next) => {
 // Get Products By Brand
 controllers.getProductByBrand = async (req, res, next) => {
     try {
-        // if (!req.userId) return res.reply(messages.unauthorized());
         const userDoc = _.decodeToken(req.headers.authorization);
         const aBrand = await Brand.findOne({ sSlug: req.params.slug, bIsActive: true });
         if (!aBrand) return res.reply(messages.not_found('Brand'));

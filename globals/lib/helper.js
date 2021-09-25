@@ -272,6 +272,10 @@ _.isPassword = function (password) {
     return !regeX.test(password);
 };
 
+_.isValidObjectID = function (sObjectID) {
+    return !sObjectID.length == 24;
+}
+
 _.randomizeArray = function (array = []) {
     const arrayLength = array.length;
     for (let i = 0; i < arrayLength; i += 1) {

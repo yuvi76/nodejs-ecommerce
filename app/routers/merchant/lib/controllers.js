@@ -8,7 +8,13 @@ const controllers = {};
 // Seller Request
 controllers.sellerRequest = (req, res) => {
     try {
-        // if (!req.userId) return res.reply(messages.unauthorized());
+        if (!req.body.sName) return res.reply(messages.required_field("Name"));
+        if (!req.body.sEmail) return res.reply(messages.required_field("Email ID"));
+        if (!req.body.sPhoneNumber) return res.reply(messages.required_field("Phone Number"));
+        if (!req.body.sBrand) return res.reply(messages.required_field("Brand"));
+        if (!req.body.sBusiness) return res.reply(messages.required_field("Businees"));
+        if (_.isEmail(req.body.sEmail)) return res.reply(messages.invalid('Email ID'));
+        if (_.isValidString(req.body.sName) || _.isValidName(req.body.sName)) return res.reply(messages.invalid("Name"));
         const merchant = new Merchant({
             sName: req.body.sName,
             sEmail: req.body.sEmail,
@@ -48,6 +54,8 @@ controllers.list = async (req, res, next) => {
 // Update merchant status by id
 controllers.updateMerchantById = async (req, res, next) => {
     try {
+        if (!req.body.bIsActive) return res.reply(messages.not_found("Active Status"));
+        if (!req.body.eStatus) return res.reply(messages.not_found("Status"));
         let oMerchant = {
             bIsActive: req.body.bIsActive,
             eStatus: req.body.eStatus,
@@ -93,6 +101,12 @@ controllers.merchantSignup = async (req, res, next) => {
     try {
         const { sEmail, sFirstname, sLastname, sPassword } = req.body;
 
+        if (!req.body.sEmail) return res.reply(messages.required_field('Email'));
+        if (!req.body.sFirstname || !req.body.sLastname) return res.reply(messages.required_field('Full Name'));
+        if (!req.body.sPassword) return res.reply(messages.required_field('Password'));
+        if (_.isEmail(req.body.sEmail)) return res.reply(messages.invalid('Email ID'));
+        if (_.isValidString(req.body.sFirstname) || _.isValidName(req.body.sFirstname)) return res.reply(messages.invalid("First Name"));
+        if (_.isValidString(req.body.sLastname) || _.isValidName(req.body.sLastname)) return res.reply(messages.invalid("Last Name"));
         const aUser = await User.findOne({
             sEmail,
             sResetPasswordToken: req.params.token

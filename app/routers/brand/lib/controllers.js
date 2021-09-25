@@ -4,9 +4,8 @@ const controllers = {};
 // Add Brand
 controllers.add = (req, res) => {
     try {
-        // if (!req.userId) return res.reply(messages.unauthorized());
-        if (!req.body.sName) return res.reply(messages.not_found("Name"));
-        if (!req.body.sDescription) return res.reply(messages.not_found("Description"));
+        if (!req.body.sName) return res.reply(messages.required_field("Name"));
+        if (!req.body.sDescription) return res.reply(messages.required_field("Description"));
 
         const brand = new Brand({
             sName: req.body.sName,
@@ -29,8 +28,6 @@ controllers.add = (req, res) => {
 // Get All Brand
 controllers.getBrand = async (req, res, next) => {
     try {
-        // if (!req.userId) return res.reply(messages.unauthorized());
-
         await Brand.find({ bIsActive: true }).populate('oMerchantId').exec((err, Brandes) => {
             if (err) return res.reply(messages.error());
             return res.reply(messages.successfully("Brand List"), {
@@ -47,7 +44,6 @@ controllers.getBrand = async (req, res, next) => {
 // Get Brands
 controllers.getBrandbyMerchant = async (req, res, next) => {
     try {
-        // if (!req.userId) return res.reply(messages.unauthorized());
         if (req.role == "merchant") {
             Brand.find({ oMerchantId: req.userId }).populate('oMerchantId', 'sUsername').exec((err, Brandes) => {
                 if (err) return res.reply(messages.error());
@@ -74,8 +70,6 @@ controllers.getBrandbyMerchant = async (req, res, next) => {
 // Get Brand By Id
 controllers.getBrandById = async (req, res, next) => {
     try {
-        // if (!req.userId) return res.reply(messages.unauthorized());
-
         await Brand.findById(req.params.id, (err, Brand) => {
             if (err) return res.reply(messages.error());
             return res.reply(messages.successfully("Brand Detail"), Brand);
@@ -89,8 +83,6 @@ controllers.getBrandById = async (req, res, next) => {
 // Update Brand By Id
 controllers.updateBrandById = async (req, res, next) => {
     try {
-        // if (!req.userId) return res.reply(messages.unauthorized());
-
         await Brand.findByIdAndUpdate(req.params.id, req.body, { new: true }, (err, brand) => {
             if (err) return res.reply(messages.error());
             return res.reply(messages.updated("Brand Detail"), brand);
@@ -104,8 +96,6 @@ controllers.updateBrandById = async (req, res, next) => {
 // Delete Brand By Id
 controllers.deleteBrandById = async (req, res, next) => {
     try {
-        // if (!req.userId) return res.reply(messages.unauthorized());
-
         await Brand.deleteOne({ _id: req.params.id }, (err, brand) => {
             if (err) return res.reply(messages.error());
             return res.reply(messages.deleted("Brand"));

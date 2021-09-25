@@ -23,11 +23,18 @@ controllers.register = (req, res) => {
         bcrypt.hash(req.body.sPassword, saltRounds, (err, hash) => {
             if (err) return res.reply(messages.error())
             if (!req.body.sEmail) return res.reply(messages.required_field('Email'));
+            if (!req.body.sFirstname || !req.body.sLastname) return res.reply(messages.required_field('Full Name'));
             if (_.isEmail(req.body.sEmail)) return res.reply(messages.invalid('Email ID'));
-
+            if (_.isValidString(req.body.sFirstname) || _.isValidName(req.body.sFirstname)) return res.reply(messages.invalid("First Name"));
+            if (_.isValidString(req.body.sLastname) || _.isValidName(req.body.sLastname)) return res.reply(messages.invalid("Last Name"));
+            if (_.isValidString(req.body.sUserName) || _.isValidName(req.body.sUserName)) return res.reply(messages.invalid("Username"));
             const user = new User({
                 sEmail: req.body.sEmail,
                 sUsername: req.body.sUsername,
+                oName: {
+                    sFirstname: req.body.sFirstname,
+                    sLastname: req.body.sLastname,
+                },
                 sHash: hash
             });
 
@@ -50,6 +57,8 @@ controllers.register = (req, res) => {
 // User Login
 controllers.login = (req, res) => {
     try {
+        if (!req.body.sEmail) return res.reply(messages.required_field('Email'));
+        if (!req.body.sPassword) return res.reply(messages.required_field('Password'));
         if (_.isEmail(req.body.sEmail)) return res.reply(messages.invalid('Email ID'));
         User.findOne({ sEmail: req.body.sEmail }, (err, user) => {
             if (err) return res.reply(messages.error());
@@ -96,8 +105,6 @@ controllers.logout = (req, res, next) => {
 
 controllers.passwordReset = (req, res, next) => {
     try {
-
-        log.red(req.body);
         if (!req.body.sEmail) return res.reply(messages.required_field('Email ID'));
         if (_.isEmail(req.body.sEmail)) return res.reply(messages.invalid('Email ID'));
 
@@ -174,7 +181,7 @@ controllers.passwordResetPost = (req, res, next) => {
         if (!req.body.sConfirmPassword) return res.reply(messages.not_found("Confirm Password"));
 
         if (_.isPassword(req.body.sPassword)) return res.reply(messages.invalid("Password"));
-        if (_.isPassword(req.body.sConfirmPassword)) return res.reply(messages.invalid("Password"));
+        if (_.isPassword(req.body.sConfirmPassword)) return res.reply(messages.invalid("Confirm Password"));
 
         User.findOne({
             sResetPasswordToken: req.params.token

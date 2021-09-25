@@ -4,7 +4,8 @@ const controllers = {};
 // Create Category  
 controllers.create = (req, res) => {
     try {
-        // if (!req.userId) return res.reply(messages.unauthorized());
+        if (!req.body.sName) return res.reply(messages.required_field("Name"));
+        if (!req.body.sDescription) return res.reply(messages.required_field("Description"));
         const category = new Category({
             sName: req.body.sName,
             sDescription: req.body.sDescription,
@@ -28,8 +29,6 @@ controllers.create = (req, res) => {
 // Get All Category
 controllers.getCategory = async (req, res, next) => {
     try {
-        // if (!req.userId) return res.reply(messages.unauthorized());
-
         await Category.find({}, (err, categories) => {
             if (err) return res.reply(messages.error())
             return res.reply(messages.successfully('Category List'), categories);
@@ -43,8 +42,6 @@ controllers.getCategory = async (req, res, next) => {
 // Get store categories api
 controllers.list = async (req, res, next) => {
     try {
-        // if (!req.userId) return res.reply(messages.unauthorized());
-
         await Category.find({ bIsActive: true }, (err, categories) => {
             if (err) return res.reply(messages.error())
             return res.reply(messages.successfully('Category List'), categories);
@@ -58,8 +55,6 @@ controllers.list = async (req, res, next) => {
 // Get category by id
 controllers.getCategoryById = async (req, res, next) => {
     try {
-        // if (!req.userId) return res.reply(messages.unauthorized());
-
         Category.findById(req.params.id).populate({
             path: 'aProducts',
             select: 'sName'
@@ -79,7 +74,9 @@ controllers.getCategoryById = async (req, res, next) => {
 // Update category by id
 controllers.updateCategoryById = async (req, res, next) => {
     try {
-        // if (!req.userId) return res.reply(messages.unauthorized());
+        if (!req.body.sName) return res.reply(messages.required_field("Name"));
+        if (!req.body.sDescription) return res.reply(messages.required_field("Description"));
+        if (!req.body.bIsActive) return res.reply(messages.required_field("Status"));
         let oCategory = {
             sName: req.body.sName,
             sDescription: req.body.sDescription,
@@ -102,8 +99,6 @@ controllers.updateCategoryById = async (req, res, next) => {
 // Delete category by id
 controllers.deleteCategoryById = async (req, res, next) => {
     try {
-        // if (!req.userId) return res.reply(messages.unauthorized());
-
         await Category.deleteOne({ _id: req.params.id }, (err, category) => {
             if (err)
                 return res.reply(messages.error());

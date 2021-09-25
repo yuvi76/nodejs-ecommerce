@@ -6,6 +6,9 @@ const controllers = {};
 // Add Order  
 controllers.add = (req, res) => {
     try {
+        if (!req.body.oCartId) return res.reply(messages.required_field("Cart ID"));
+        if (!req.body.nTotal) return res.reply(messages.required_field("Total"));
+        if (_.isValidObjectID(req.body.oCartId)) res.reply(messages.invalid("Cart ID"));
         const order = new Order({
             oCartId: req.body.oCartId,
             oUserId: req.userId,
@@ -93,8 +96,6 @@ controllers.searchById = async (req, res) => {
 // Get All Order
 controllers.getOrder = async (req, res, next) => {
     try {
-        // if (!req.userId) return res.reply(messages.unauthorized());
-
         let aOrder = await Order.find({ oUserId: req.userId }).populate({
             path: 'Cart',
             populate: {
@@ -193,6 +194,10 @@ controllers.cancelOrderById = async (req, res) => {
 // Update Order By Id
 controllers.updateOrderById = async (req, res) => {
     try {
+        if (!req.body.cartId) return res.reply(messages.required_field("Cart ID"));
+        if (!req.body.orderId) return res.reply(messages.required_field("Order ID"));
+        if (_.isValidObjectID(req.body.cartId)) res.reply(messages.invalid("Cart ID"));
+        if (_.isValidObjectID(req.body.orderId)) res.reply(messages.invalid("Order ID"));
         const itemId = req.params.itemId;
         const orderId = req.body.orderId;
         const cartId = req.body.cartId;

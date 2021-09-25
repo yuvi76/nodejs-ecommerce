@@ -4,7 +4,10 @@ const controllers = {};
 // Add Cart
 controllers.add = (req, res) => {
     try {
-        // if (!req.userId) return res.reply(messages.unauthorized());
+        if (!req.body.oProductId) return res.reply(messages.required_field("Product ID"));
+        if (!req.body.nQuantity) return res.reply(messages.required_field("Quantity"));
+        if (_.isValidObjectID(req.body.oProductId)) res.reply(messages.invalid("Product ID"));
+
         let aProducts = [{
             oProductId: req.body.oProductId,
             nQuantity: req.body.nQuantity
@@ -31,8 +34,6 @@ controllers.add = (req, res) => {
 // Delete Cart By Id
 controllers.deleteCartById = async (req, res, next) => {
     try {
-        // if (!req.userId) return res.reply(messages.unauthorized());
-
         await Cart.deleteOne({ _id: req.params.cartId }, (err, result) => {
             if (err) return res.reply(messages.error());
             return res.reply(messages.deleted("Cart"));
@@ -46,7 +47,10 @@ controllers.deleteCartById = async (req, res, next) => {
 // Add Product To Cart
 controllers.addProductToCart = async (req, res, next) => {
     try {
-        // if (!req.userId) return res.reply(messages.unauthorized());
+        if (!req.body.oProductId) return res.reply(messages.required_field("Product ID"));
+        if (!req.body.nQuantity) return res.reply(messages.required_field("Quantity"));
+        if (_.isValidObjectID(req.body.oProductId)) res.reply(messages.invalid("Product ID"));
+            
         let aProducts = [{
             oProductId: req.body.oProductId,
             nQuantity: req.body.nQuantity
@@ -65,8 +69,6 @@ controllers.addProductToCart = async (req, res, next) => {
 // Remove Product From Cart
 controllers.removeProductFromCart = async (req, res, next) => {
     try {
-        // if (!req.userId) return res.reply(messages.unauthorized());
-
         await Cart.updateOne({ _id: req.params.cartId }, { $pull: { aProducts: { oProductId: req.params.productId } } }, (err, result) => {
             if (err) return res.reply(messages.error());
             return res.reply(messages.deleted("Product From Cart"), result);
