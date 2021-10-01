@@ -9,7 +9,7 @@ controllers.profile = (req, res) => {
             _id: req.userId
         }, {
             oName: 1,
-            sUserName: 1,
+            sUsername: 1,
             sEmail: 1
         }, (err, user) => {
             if (err) return res.reply(messages.server_error());
@@ -28,17 +28,17 @@ controllers.updateProfile = async (req, res, next) => {
 
         let oProfileDetails = {};
 
-        if (!req.body.sUserName) return res.reply(messages.not_found("Username"));
+        if (!req.body.sUsername) return res.reply(messages.not_found("Username"));
         if (!req.body.sFirstname) return res.reply(messages.not_found("First Name"));
         if (!req.body.sLastname) return res.reply(messages.not_found("Last Name"));
 
         if (_.isValidString(req.body.sFirstname) || _.isValidName(req.body.sFirstname)) return res.reply(messages.invalid("First Name"));
         if (_.isValidString(req.body.sLastname) || _.isValidName(req.body.sLastname)) return res.reply(messages.invalid("Last Name"));
-        if (_.isValidString(req.body.sUserName) || _.isValidName(req.body.sUserName)) return res.reply(messages.invalid("Username"));
+        if (_.isValidString(req.body.sUsername) || _.isValidName(req.body.sUsername)) return res.reply(messages.invalid("Username"));
 
 
         oProfileDetails = {
-            sUserName: req.body.sUserName,
+            sUsername: req.body.sUsername,
             oName: {
                 sFirstname: req.body.sFirstname,
                 sLastname: req.body.sLastname

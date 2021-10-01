@@ -27,7 +27,7 @@ controllers.register = (req, res) => {
             if (_.isEmail(req.body.sEmail)) return res.reply(messages.invalid('Email ID'));
             if (_.isValidString(req.body.sFirstname) || _.isValidName(req.body.sFirstname)) return res.reply(messages.invalid("First Name"));
             if (_.isValidString(req.body.sLastname) || _.isValidName(req.body.sLastname)) return res.reply(messages.invalid("Last Name"));
-            if (_.isValidString(req.body.sUserName) || _.isValidName(req.body.sUserName)) return res.reply(messages.invalid("Username"));
+            if (_.isValidString(req.body.sUsername) || _.isValidName(req.body.sUsername)) return res.reply(messages.invalid("Username"));
             const user = new User({
                 sEmail: req.body.sEmail,
                 sUsername: req.body.sUsername,

@@ -33,6 +33,7 @@ const builder = {
     successfully: (prefix) => builder.prepare(200, prefix, 'successfully'),
     error: (prefix) => builder.prepare(500, prefix, 'error'),
     no_prefix: (prefix) => builder.prepare(200, prefix, ''),
+    invalid: (prefix) => builder.prepare(406, prefix, 'invalid'),
     custom: { ...customMessages },
     notifications,
 };

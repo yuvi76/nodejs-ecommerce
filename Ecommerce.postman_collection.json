@@ -321,6 +321,16 @@
 									"key": "sPassword",
 									"value": "Abc@123",
 									"type": "text"
+								},
+								{
+									"key": "sFirstname",
+									"value": "Yuvi",
+									"type": "text"
+								},
+								{
+									"key": "sLastname",
+									"value": "yuvi",
+									"type": "text"
 								}
 							]
 						},
