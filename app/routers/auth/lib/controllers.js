@@ -20,14 +20,16 @@ let signJWT = function (user) {
 // Register User
 controllers.register = (req, res) => {
     try {
+        if (!req.body.sPassword) return res.reply(messages.required_field('Password'));
+        if (_.isPassword(req.body.sPassword)) return res.reply(messages.invalid("Password"));
         bcrypt.hash(req.body.sPassword, saltRounds, (err, hash) => {
             if (err) return res.reply(messages.error())
             if (!req.body.sEmail) return res.reply(messages.required_field('Email'));
             if (!req.body.sFirstname || !req.body.sLastname) return res.reply(messages.required_field('Full Name'));
-            if (_.isEmail(req.body.sEmail)) return res.reply(messages.invalid('Email ID'));
-            if (_.isValidString(req.body.sFirstname) || _.isValidName(req.body.sFirstname)) return res.reply(messages.invalid("First Name"));
-            if (_.isValidString(req.body.sLastname) || _.isValidName(req.body.sLastname)) return res.reply(messages.invalid("Last Name"));
-            if (_.isValidString(req.body.sUsername) || _.isValidName(req.body.sUsername)) return res.reply(messages.invalid("Username"));
+            if (_.isEmail(req.body.sEmail)) return res.reply(messages.no_prefix('Please Enter Valid Email.'));
+            if (_.isValidString(req.body.sFirstname) || _.isValidName(req.body.sFirstname) || _.isEmptyString(req.body.sFirstname)) return res.reply(messages.invalid("First Name"));
+            if (_.isValidString(req.body.sLastname) || _.isValidName(req.body.sLastname) || _.isEmptyString(req.body.sLastname)) return res.reply(messages.invalid("Last Name"));
+            if (_.isValidString(req.body.sUsername) || _.isValidName(req.body.sUsername) || _.isEmptyString(req.body.sUsername)) return res.reply(messages.invalid("Username"));
             const user = new User({
                 sEmail: req.body.sEmail,
                 sUsername: req.body.sUsername,
@@ -59,7 +61,7 @@ controllers.login = (req, res) => {
     try {
         if (!req.body.sEmail) return res.reply(messages.required_field('Email'));
         if (!req.body.sPassword) return res.reply(messages.required_field('Password'));
-        if (_.isEmail(req.body.sEmail)) return res.reply(messages.invalid('Email ID'));
+        if (_.isEmail(req.body.sEmail)) return res.reply(messages.no_prefix('Please Enter Valid Email.'));
         User.findOne({ sEmail: req.body.sEmail }, (err, user) => {
             if (err) return res.reply(messages.error());
             if (!user) return res.reply(messages.not_found('User'));
@@ -106,7 +108,7 @@ controllers.logout = (req, res, next) => {
 controllers.passwordReset = (req, res, next) => {
     try {
         if (!req.body.sEmail) return res.reply(messages.required_field('Email ID'));
-        if (_.isEmail(req.body.sEmail)) return res.reply(messages.invalid('Email ID'));
+        if (_.isEmail(req.body.sEmail)) return res.reply(messages.no_prefix('Please Enter Valid Email.'));
 
         var randomHash = '';
         crypto.randomBytes(20, function (err, buf) {

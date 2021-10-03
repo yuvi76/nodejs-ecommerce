@@ -242,7 +242,7 @@ _.request = function (body, options, callback) {
     req.end();
 };
 
-_.axios = function (option, callback = () => {}) {
+_.axios = function (option, callback = () => { }) {
     return axios(option)
         .then((response) => callback(null, _.parse(response.data)))
         .catch((error) => callback(error.message));
@@ -260,6 +260,11 @@ _.isUserName = function (name) {
 
 _.isValidName = function (name) {
     const regeX = /^[a-zA-Z](( )?[a-zA-Z]+)*$/;
+    return !regeX.test(name);
+}
+
+_.isEmptyString = function (name) {
+    const regeX = /^(?![\s-])[\w\s-]+$/;
     return !regeX.test(name);
 }
 
@@ -303,7 +308,7 @@ _.roundDownToMultiple = function (number, multiple) {
     return number - (number % multiple);
 };
 
-_.emptyCallback = (error, response) => {};
+_.emptyCallback = (error, response) => { };
 
 _.errorCallback = (error, response) => {
     if (error) console.error(error);
