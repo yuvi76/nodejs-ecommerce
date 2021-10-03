@@ -33,6 +33,3 @@ process.env.SMTP_HOST = 'smtp.gmail.com' || 'smtp.sendgrid.net';
 process.env.SMTP_PORT = 465;
 process.env.SMTP_USERNAME = process.env.SMTP_USERNAME || 'example@gmail.com'; // SMTP email
 process.env.SMTP_PASSWORD = process.env.SMTP_PASSWORD || 'example@123'; // Your password
-
-process.env.REDIS_HOST = process.env.REDIS_HOST || '127.0.0.1';
-process.env.REDIS_PORT = process.env.REDIS_PORT || 6379;
