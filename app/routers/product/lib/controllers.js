@@ -1,5 +1,6 @@
 const { Product, Brand, Category, Wishlist } = require('../../../models');
 const mongoose = require('mongoose');
+const redis = require('../../../utils/lib/redis');
 const controllers = {};
 
 // Add Product  
@@ -57,12 +58,18 @@ controllers.getProducts = async (req, res, next) => {
                 })
                 .where('oBrandId', brandId);
         } else {
-            aProducts = await Product.find({}).populate({
-                path: 'oBrandId',
-                populate: {
-                    path: 'oMerchantId',
-                    model: 'Merchant'
+            aProducts = await redis.getAsync("Product").then(async function (result) {
+                if (!result) {
+                    result = await Product.find({}).populate({
+                        path: 'oBrandId',
+                        populate: {
+                            path: 'oMerchantId',
+                            model: 'Merchant'
+                        }
+                    });
+                    redis.setAsync("Product", result);
                 }
+                return result;
             });
         }
         if (!aProducts) return res.reply(messages.not_found('Products'));
