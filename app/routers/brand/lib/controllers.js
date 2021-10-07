@@ -4,8 +4,8 @@ const controllers = {};
 // Add Brand
 controllers.add = (req, res) => {
     try {
-        if (!req.body.sName) return res.reply(messages.required_field("Name"));
-        if (!req.body.sDescription) return res.reply(messages.required_field("Description"));
+        if (!req.body.sName || _.isEmptyString(req.body.sName)) return res.reply(messages.required_field("Name"));
+        if (!req.body.sDescription || _.isEmptyString(req.body.sDescription)) return res.reply(messages.required_field("Description"));
 
         const brand = new Brand({
             sName: req.body.sName,

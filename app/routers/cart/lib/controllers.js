@@ -7,6 +7,7 @@ controllers.add = (req, res) => {
         if (!req.body.oProductId) return res.reply(messages.required_field("Product ID"));
         if (!req.body.nQuantity) return res.reply(messages.required_field("Quantity"));
         if (_.isValidObjectID(req.body.oProductId)) res.reply(messages.invalid("Product ID"));
+        if (_.isValidNumber(req.body.nQuantity)) res.reply(messages.invalid("Product Quantity"));
 
         let aProducts = [{
             oProductId: req.body.oProductId,
@@ -50,7 +51,8 @@ controllers.addProductToCart = async (req, res, next) => {
         if (!req.body.oProductId) return res.reply(messages.required_field("Product ID"));
         if (!req.body.nQuantity) return res.reply(messages.required_field("Quantity"));
         if (_.isValidObjectID(req.body.oProductId)) res.reply(messages.invalid("Product ID"));
-            
+        if (_.isValidNumber(req.body.nQuantity)) res.reply(messages.invalid("Product Quantity"));
+        
         let aProducts = [{
             oProductId: req.body.oProductId,
             nQuantity: req.body.nQuantity

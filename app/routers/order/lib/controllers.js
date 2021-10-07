@@ -9,6 +9,8 @@ controllers.add = (req, res) => {
         if (!req.body.oCartId) return res.reply(messages.required_field("Cart ID"));
         if (!req.body.nTotal) return res.reply(messages.required_field("Total"));
         if (_.isValidObjectID(req.body.oCartId)) res.reply(messages.invalid("Cart ID"));
+        if (_.isValidNumber(req.body.nTotal)) res.reply(messages.invalid("Total"));
+
         const order = new Order({
             oCartId: req.body.oCartId,
             oUserId: req.userId,

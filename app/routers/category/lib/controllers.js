@@ -4,8 +4,8 @@ const controllers = {};
 // Create Category  
 controllers.create = (req, res) => {
     try {
-        if (!req.body.sName) return res.reply(messages.required_field("Name"));
-        if (!req.body.sDescription) return res.reply(messages.required_field("Description"));
+        if (!req.body.sName || _.isEmptyString(req.body.sName)) return res.reply(messages.required_field("Name"));
+        if (!req.body.sDescription || _.isEmptyString(req.body.sDescription)) return res.reply(messages.required_field("Description"));
         const category = new Category({
             sName: req.body.sName,
             sDescription: req.body.sDescription,
@@ -18,7 +18,7 @@ controllers.create = (req, res) => {
             })
             .catch((error) => {
                 console.log("error from mongo" + error);
-                return res.reply(messages.server_error());
+                return res.reply(messages.already_exists('Category'));
             });
     } catch (error) {
         console.log(error);
@@ -74,8 +74,8 @@ controllers.getCategoryById = async (req, res, next) => {
 // Update category by id
 controllers.updateCategoryById = async (req, res, next) => {
     try {
-        if (!req.body.sName) return res.reply(messages.required_field("Name"));
-        if (!req.body.sDescription) return res.reply(messages.required_field("Description"));
+        if (!req.body.sName || _.isEmptyString(req.body.sName)) return res.reply(messages.required_field("Name"));
+        if (!req.body.sDescription || _.isEmptyString(req.body.sDescription)) return res.reply(messages.required_field("Description"));
         if (!req.body.bIsActive) return res.reply(messages.required_field("Status"));
         let oCategory = {
             sName: req.body.sName,

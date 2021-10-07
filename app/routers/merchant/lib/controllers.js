@@ -14,7 +14,11 @@ controllers.sellerRequest = (req, res) => {
         if (!req.body.sBrand) return res.reply(messages.required_field("Brand"));
         if (!req.body.sBusiness) return res.reply(messages.required_field("Businees"));
         if (_.isEmail(req.body.sEmail)) return res.reply(messages.invalid('Email ID'));
-        if (_.isValidString(req.body.sName) || _.isValidName(req.body.sName)) return res.reply(messages.invalid("Name"));
+        if (_.isValidString(req.body.sName) || _.isValidName(req.body.sName) || _.isEmptyString(req.body.sName)) return res.reply(messages.invalid("Name"));
+        if (_.isEmptyString(req.body.sPhoneNumber)) return res.reply(messages.invalid("Phone Number"));
+        if (_.isEmptyString(req.body.sBrand)) return res.reply(messages.invalid("Brand"));
+        if (_.isEmptyString(req.body.sBusiness)) return res.reply(messages.invalid("Businees"));
+
         const merchant = new Merchant({
             sName: req.body.sName,
             sEmail: req.body.sEmail,
@@ -105,8 +109,8 @@ controllers.merchantSignup = async (req, res, next) => {
         if (!req.body.sFirstname || !req.body.sLastname) return res.reply(messages.required_field('Full Name'));
         if (!req.body.sPassword) return res.reply(messages.required_field('Password'));
         if (_.isEmail(req.body.sEmail)) return res.reply(messages.invalid('Email ID'));
-        if (_.isValidString(req.body.sFirstname) || _.isValidName(req.body.sFirstname)) return res.reply(messages.invalid("First Name"));
-        if (_.isValidString(req.body.sLastname) || _.isValidName(req.body.sLastname)) return res.reply(messages.invalid("Last Name"));
+        if (_.isValidString(req.body.sFirstname) || _.isValidName(req.body.sFirstname) || _.isEmptyString(req.body.sFirstname)) return res.reply(messages.invalid("First Name"));
+        if (_.isValidString(req.body.sLastname) || _.isValidName(req.body.sLastname) || _.isEmptyString(req.body.sLastname)) return res.reply(messages.invalid("Last Name"));
         const aUser = await User.findOne({
             sEmail,
             sResetPasswordToken: req.params.token

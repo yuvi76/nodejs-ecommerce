@@ -272,6 +272,11 @@ _.isValidString = function (sString) {
     return !sString.trim().length > 0 && sString.trim().length <= 100;
 }
 
+_.isValidNumber = function (name) {
+    const regeX = /^[0-9]*$/;
+    return !regeX.test(name);
+}
+
 _.isPassword = function (password) {
     const regeX = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,15}$/;
     return !regeX.test(password);

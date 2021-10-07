@@ -7,12 +7,15 @@ const controllers = {};
 controllers.add = (req, res) => {
     try {
         if (!req.body.oBrandId) return res.reply(messages.required_field("Brand ID"));
-        if (!req.body.sName) return res.reply(messages.required_field("Name"));
+        if (!req.body.sName || _.isEmptyString(req.body.sName)) return res.reply(messages.required_field("Name"));
         if (!req.body.nPrice) return res.reply(messages.required_field("Price"));
-        if (!req.body.sDescription) return res.reply(messages.required_field("Description"));
+        if (!req.body.sDescription || _.isEmptyString(req.body.sDescription)) return res.reply(messages.required_field("Description"));
         if (!req.body.nQuantity) return res.reply(messages.required_field("Quantity"));
         if (!req.body.bTaxable) return res.reply(messages.required_field("Tax Status"));
         if (_.isValidObjectID(req.body.oBrandId)) res.reply(messages.invalid("Brand ID"));
+        if (_.isValidNumber(req.body.nPrice)) res.reply(messages.invalid("Price"));
+        if (_.isValidNumber(req.body.nQuantity)) res.reply(messages.invalid("Quantity"));
+        
         const product = new Product({
             oBrandId: req.body.oBrandId,
             sName: req.body.sName,

@@ -15,6 +15,7 @@ const ProductSchema = mongoose.Schema(
     sName: {
       type: String,
       trim: true,
+      unique: true,
     },
     sSlug: {
       type: String,

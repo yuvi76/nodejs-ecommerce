@@ -9,6 +9,7 @@ const MerchantSchema = mongoose.Schema(
     },
     sEmail: {
       type: String,
+      unique: true,
     },
     sPhoneNumber: {
       type: String,
