@@ -1,5 +1,5 @@
 const redis = require('redis');
-const ioRedis = require('socket.io-redis');
+// const ioRedis = require('socket.io-redis');
 const { promisify } = require('util');
 
 function RedisClient() {
@@ -14,7 +14,7 @@ RedisClient.prototype.initialize = function () {
     this.publisher = redis.createClient(this.options);
     this.subscriber = redis.createClient(this.options);
 
-    if (process.env.NODE_ENV !== 'prod') this.redisClient.config('SET', 'notify-keyspace-events', 'Ex'); // TODO -> move to setupConfig
+    // if (process.env.NODE_ENV !== 'prod') this.redisClient.config('SET', 'notify-keyspace-events', 'Ex'); // TODO -> move to setupConfig
     this.redisClient.on('ready', this.setupConfig.bind(this));
 };
 
@@ -28,9 +28,9 @@ RedisClient.prototype.setupConfig = function () {
     this.setupVariables();
 };
 
-RedisClient.prototype.getAdapter = function () {
-    return ioRedis({ ...this.options, subClient: this.subscriber, pubClient: this.publisher });
-};
+// RedisClient.prototype.getAdapter = function () {
+//     return ioRedis({ ...this.options, subClient: this.subscriber, pubClient: this.publisher });
+// };
 
 RedisClient.prototype.setupVariables = async function () {
     this.setDataWithExpiry = async (key, data, ttl) => {

@@ -1,5 +1,6 @@
 const { Product, Brand, Category, Wishlist } = require('../../../models');
 const mongoose = require('mongoose');
+const redis = require('../../../utils/lib/redis');
 const controllers = {};
 
 // Add Product  
@@ -57,12 +58,18 @@ controllers.getProducts = async (req, res, next) => {
                 })
                 .where('oBrandId', brandId);
         } else {
-            aProducts = await Product.find({}).populate({
-                path: 'oBrandId',
-                populate: {
-                    path: 'oMerchantId',
-                    model: 'Merchant'
+            aProducts = await redis.getAsync("Product").then(async function (result) {
+                if (!result) {
+                    result = await Product.find({}).populate({
+                        path: 'oBrandId',
+                        populate: {
+                            path: 'oMerchantId',
+                            model: 'Merchant'
+                        }
+                    });
+                    redis.setAsync("Product", result);
                 }
+                return result;
             });
         }
         if (!aProducts) return res.reply(messages.not_found('Products'));
@@ -145,78 +152,83 @@ controllers.getAllProduct = async (req, res, next) => {
     try {
         const userDoc = _.decodeToken(req.headers.authorization);
         if (userDoc) {
-            const aProducts = await Product.aggregate([
-                {
-                    $match: { bIsActive: true }
-                },
-                {
-                    $lookup: {
-                        from: 'wishlists',
-                        let: { product: '$_id' },
-                        pipeline: [
-                            {
-                                $match: {
-                                    $and: [
-                                        { $expr: { $eq: ['$$product', '$oProductId'] } },
-                                        { user: new mongoose.Types.ObjectId(userDoc.id) }
+            const aProducts = await redis.getAsync("All-Product-List").then(async function (result) {
+                if (!result) {
+                    result = await Product.aggregate([
+                        {
+                            $match: { bIsActive: true }
+                        },
+                        {
+                            $lookup: {
+                                from: 'wishlists',
+                                let: { product: '$_id' },
+                                pipeline: [
+                                    {
+                                        $match: {
+                                            $and: [
+                                                { $expr: { $eq: ['$$product', '$oProductId'] } },
+                                                { user: new mongoose.Types.ObjectId(userDoc.id) }
+                                            ]
+                                        }
+                                    }
+                                ],
+                                as: 'isLiked'
+                            }
+                        },
+                        {
+                            $addFields: {
+                                isLiked: { $arrayElemAt: ['$isLiked.isLiked', 0] }
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: 'brands',
+                                localField: 'oBrandId',
+                                foreignField: '_id',
+                                as: 'brands'
+                            }
+                        },
+                        {
+                            $unwind: '$brands'
+                        },
+                        {
+                            $addFields: {
+                                'oBrandId.sName': '$brands.sName',
+                                'oBrandId._id': '$brands._id',
+                                'oBrandId.bIsActive': '$brands.bIsActive'
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: 'reviews',
+                                localField: '_id',
+                                foreignField: 'oProductId',
+                                as: 'reviews'
+                            }
+                        },
+                        {
+                            $addFields: {
+                                totalRatings: { $sum: '$reviews.rating' },
+                                totalReviews: { $size: '$reviews' }
+                            }
+                        },
+                        {
+                            $addFields: {
+                                averageRating: {
+                                    $cond: [
+                                        { $eq: ['$totalReviews', 0] },
+                                        0,
+                                        { $divide: ['$totalRatings', '$totalReviews'] }
                                     ]
                                 }
                             }
-                        ],
-                        as: 'isLiked'
-                    }
-                },
-                {
-                    $addFields: {
-                        isLiked: { $arrayElemAt: ['$isLiked.isLiked', 0] }
-                    }
-                },
-                {
-                    $lookup: {
-                        from: 'brands',
-                        localField: 'oBrandId',
-                        foreignField: '_id',
-                        as: 'brands'
-                    }
-                },
-                {
-                    $unwind: '$brands'
-                },
-                {
-                    $addFields: {
-                        'oBrandId.sName': '$brands.sName',
-                        'oBrandId._id': '$brands._id',
-                        'oBrandId.bIsActive': '$brands.bIsActive'
-                    }
-                },
-                {
-                    $lookup: {
-                        from: 'reviews',
-                        localField: '_id',
-                        foreignField: 'oProductId',
-                        as: 'reviews'
-                    }
-                },
-                {
-                    $addFields: {
-                        totalRatings: { $sum: '$reviews.rating' },
-                        totalReviews: { $size: '$reviews' }
-                    }
-                },
-                {
-                    $addFields: {
-                        averageRating: {
-                            $cond: [
-                                { $eq: ['$totalReviews', 0] },
-                                0,
-                                { $divide: ['$totalRatings', '$totalReviews'] }
-                            ]
-                        }
-                    }
-                },
-                { $project: { brands: 0, reviews: 0 } }
-            ]);
-
+                        },
+                        { $project: { brands: 0, reviews: 0 } }
+                    ]);
+                    redis.setAsync("All-Product-List", result);
+                }
+                return result;
+            });
             return res.reply(messages.no_prefix('Product List'), {
                 products: aProducts
                     .filter(item => item?.oBrandId?.bIsActive === true)
